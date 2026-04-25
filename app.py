@@ -22,9 +22,7 @@ from markupsafe import Markup, escape
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
-UPLOADS_DIR = STATIC_DIR / "uploads"
-LOGOS_DIR = UPLOADS_DIR / "logos"
-POSTS_DIR = UPLOADS_DIR / "posts"
+DEFAULT_UPLOADS_DIR = STATIC_DIR / "uploads"
 FAVICON_DIR = BASE_DIR / "favicon"
 load_dotenv(BASE_DIR / ".env")
 
@@ -41,6 +39,18 @@ def normalize_database_url(value: str | None) -> str:
 
 
 DATABASE_URL = normalize_database_url(os.environ.get("DATABASE_URL"))
+
+
+def resolve_uploads_dir() -> Path:
+    configured = str(os.environ.get("UPLOADS_DIR", "")).strip()
+    if configured:
+        return Path(configured).expanduser()
+    return DEFAULT_UPLOADS_DIR
+
+
+UPLOADS_DIR = resolve_uploads_dir()
+LOGOS_DIR = UPLOADS_DIR / "logos"
+POSTS_DIR = UPLOADS_DIR / "posts"
 
 
 def normalize_admin_base_path(value: str) -> str:
@@ -710,6 +720,7 @@ app.add_middleware(
     same_site="lax",
     https_only=os.environ.get("SESSION_HTTPS_ONLY", "false").lower() == "true",
 )
+app.mount("/static/uploads", StaticFiles(directory=UPLOADS_DIR, check_dir=False), name="uploads")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.mount("/favicon", StaticFiles(directory=FAVICON_DIR), name="favicon")
 
