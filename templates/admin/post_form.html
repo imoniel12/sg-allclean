@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ 'New Post' if not post else 'Edit Post' }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Journal Post</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ 'Create a new post' if not post else 'Edit post' }}</h1>
+</section>
+
+<form method="post" enctype="multipart/form-data" action="{% if post %}{{ url_for('edit_post_save', post_id=post.id) }}{% else %}{{ url_for('new_post_save') }}{% endif %}" class="panel grid gap-5 rounded-[2.5rem] p-7 sm:p-10">
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Title
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="title" value="{{ post.title if post else '' }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Slug
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="slug" value="{{ post.slug if post else '' }}" placeholder="auto-generated if left blank">
+        </label>
+    </div>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Excerpt
+        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="excerpt" value="{{ post.excerpt if post else '' }}" required>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Feature Image
+        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-brand file:px-4 file:py-2 file:font-bold file:text-white hover:file:bg-brand-dark" type="file" name="image" accept=".png,.jpg,.jpeg,.webp,.svg">
+    </label>
+    {% if post and post.image_path %}
+        <img class="h-48 w-full rounded-[2rem] object-cover" src="{{ post.image_path }}" alt="{{ post.title }}">
+    {% endif %}
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Status
+        <select class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" name="status">
+            <option value="draft" {% if post and post.status == 'draft' %}selected{% endif %}>Draft</option>
+            <option value="published" {% if post and post.status == 'published' %}selected{% endif %}>Published</option>
+        </select>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Body
+        <textarea class="min-h-[18rem] rounded-[2rem] border border-black/10 px-5 py-4 outline-none transition focus:border-brand" name="body" required>{{ post.body if post else '' }}</textarea>
+    </label>
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">{{ 'Create Post' if not post else 'Save Changes' }}</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}

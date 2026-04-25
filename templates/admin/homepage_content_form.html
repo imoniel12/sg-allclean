@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Homepage And Footer Copy{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Homepage And Footer</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">Edit public text content.</h1>
+</section>
+
+<form method="post" action="{{ url_for('admin_homepage_content_save') }}" class="panel grid gap-6 rounded-[2.5rem] border-mint/25 p-7 sm:p-10">
+    {% for group_name, label in [('homepage', 'Homepage Copy'), ('footer', 'Footer Copy')] %}
+        <section class="grid gap-5">
+            <div>
+                <p class="section-label">{{ label }}</p>
+                <h2 class="text-2xl font-bold text-ink">{{ label }}</h2>
+            </div>
+            {% for snippet in snippets if snippet.group_name == group_name %}
+                <label class="grid gap-2 text-sm font-bold text-ink">
+                    {{ snippet.label }}
+                    {% if snippet.input_type == 'text' %}
+                        <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="{{ snippet.key }}" value="{{ snippet.value }}" required>
+                    {% else %}
+                        <textarea class="min-h-[8rem] rounded-[2rem] border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" name="{{ snippet.key }}" required>{{ snippet.value }}</textarea>
+                    {% endif %}
+                </label>
+            {% endfor %}
+        </section>
+    {% endfor %}
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">Save Content</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}

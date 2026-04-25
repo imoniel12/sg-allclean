@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Edit Site Settings{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Brand Settings</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">Update homepage and contact details.</h1>
+</section>
+
+<form method="post" action="{{ url_for('admin_settings_save') }}" enctype="multipart/form-data" class="panel grid gap-5 rounded-[2.5rem] border-mint/25 p-7 sm:p-10">
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Company Name
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="company_name" value="{{ settings.company_name }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Tagline
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="tagline" value="{{ settings.tagline }}" required>
+        </label>
+    </div>
+
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Logo Upload
+        <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-mint file:px-4 file:py-2 file:font-bold file:text-white hover:file:bg-[#2f9c74]" type="file" name="logo" accept=".png,.jpg,.jpeg,.svg,.webp">
+    </label>
+
+    {% if settings.logo_path %}
+        <div class="rounded-[2rem] border border-mint/20 bg-mint-soft/40 p-5">
+            <div class="text-sm font-bold text-ink">Current logo</div>
+            <img class="mt-4 h-20 w-20 rounded-2xl border border-black/5 bg-white object-contain p-2" src="{{ settings.logo_path }}" alt="Current logo preview">
+        </div>
+    {% endif %}
+
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Hero Title
+        <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="hero_title" value="{{ settings.hero_title }}" required>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Hero Subtitle
+        <textarea class="min-h-[8rem] rounded-[2rem] border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" name="hero_subtitle" required>{{ settings.hero_subtitle }}</textarea>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Intro Title
+        <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="intro_title" value="{{ settings.intro_title }}" required>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Intro Body
+        <textarea class="min-h-[8rem] rounded-[2rem] border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" name="intro_body" required>{{ settings.intro_body }}</textarea>
+    </label>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Contact Email
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="email" name="contact_email" value="{{ settings.contact_email }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Contact Phone
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="contact_phone" value="{{ settings.contact_phone }}" required>
+        </label>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Location
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="location" value="{{ settings.location }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Coverage
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="coverage" value="{{ settings.coverage }}" required>
+        </label>
+    </div>
+
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Investment Note
+        <textarea class="min-h-[8rem] rounded-[2rem] border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" name="investment_note" required>{{ settings.investment_note }}</textarea>
+    </label>
+
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">Save Settings</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}

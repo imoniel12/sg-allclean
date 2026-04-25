@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Contact | {{ site_settings.company_name }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Contact</p>
+    <h1 class="max-w-4xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">Let's plan a cleaner, calmer space.</h1>
+    <p class="mt-5 max-w-3xl text-lg leading-8 text-ink/70">Tell us what needs attention and we'll match the right service approach.</p>
+</section>
+
+<section class="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+    <article class="panel rounded-[2.5rem] px-7 py-8 sm:px-10 sm:py-10">
+        <div class="mb-8">
+            <p class="section-label">Service Inquiry</p>
+            <h2 class="text-3xl font-bold text-ink">Tell us about the space, schedule, and support you need.</h2>
+            <p class="mt-4 max-w-2xl text-sm leading-7 text-ink/70">
+                Share your details below so we can understand the request and guide you to the right cleaning setup.
+            </p>
+        </div>
+
+        <form method="post" action="{{ url_for('contact_submit') }}" class="grid gap-5">
+            {% for field in form_fields %}
+                {% set is_required = field.required == 'true' %}
+                {% if field.field_type == 'radio' %}
+                    <div>
+                        <label class="mb-3 block text-sm font-bold text-ink">{{ field.label }}{% if is_required %}<span class="text-brand"> *</span>{% endif %}</label>
+                        <div class="grid gap-3 sm:grid-cols-3">
+                            {% for option in field.options.splitlines() if option.strip() %}
+                                <label class="flex items-center gap-3 rounded-3xl border border-black/10 px-5 py-4 text-sm text-ink">
+                                    <input type="radio" name="{{ field.name }}" value="{{ option|lower|replace(' ', '-') }}" {% if loop.first %}checked{% endif %}>
+                                    <span>{{ option }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% elif field.field_type == 'textarea' %}
+                    <label class="grid gap-2 text-sm font-bold text-ink">
+                        {{ field.label }}{% if is_required %}<span class="text-brand">*</span>{% endif %}
+                        <textarea class="min-h-[10rem] rounded-[2rem] border border-black/10 px-5 py-4 outline-none transition focus:border-brand" name="{{ field.name }}" {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %} {% if is_required %}required{% endif %}></textarea>
+                    </label>
+                {% else %}
+                    <label class="grid gap-2 text-sm font-bold text-ink">
+                        {{ field.label }}{% if is_required %}<span class="text-brand">*</span>{% endif %}
+                        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="{{ field.field_type }}" name="{{ field.name }}" {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %} {% if is_required %}required{% endif %}>
+                    </label>
+                {% endif %}
+            {% endfor %}
+
+            <label class="flex items-start gap-3 rounded-[1.75rem] border border-black/10 bg-[#fff8f4] px-5 py-4 text-sm leading-7 text-ink/75">
+                <input class="mt-1" type="checkbox" name="privacy_consent" required>
+                <span>
+                    I agree to the
+                    <a class="font-bold text-brand hover:text-brand-dark" href="{{ url_for('privacy') }}">Data Privacy Statement</a>
+                    of SG AllClean Environmental Services and consent to the handling of my inquiry details for service coordination.
+                </span>
+            </label>
+
+            <div class="flex flex-wrap gap-3 pt-2">
+                <button class="btn-primary" type="submit">Continue Inquiry</button>
+                <a class="btn-secondary" href="mailto:{{ site_settings.contact_email }}">Send by Email</a>
+            </div>
+        </form>
+    </article>
+
+    <aside class="space-y-6">
+        <div class="panel rounded-[2.5rem] bg-[#fff8f4] px-7 py-8">
+            <p class="section-label">Contact Details</p>
+            <h2 class="text-3xl font-bold text-ink">A direct line for scheduling, service questions, and custom packages.</h2>
+            <div class="mt-6 space-y-4 text-sm leading-7 text-ink/70">
+                <p><span class="font-bold text-ink">Email:</span> {{ site_settings.contact_email }}</p>
+                <p><span class="font-bold text-ink">Phone:</span> {{ site_settings.contact_phone }}</p>
+                <p><span class="font-bold text-ink">Service Area:</span> {{ site_settings.coverage }}</p>
+            </div>
+        </div>
+
+        <div class="panel rounded-[2.5rem] px-7 py-8">
+            <p class="section-label">Before You Contact Us</p>
+            <div class="space-y-4 text-sm leading-7 text-ink/70">
+                <p>Tell us whether the request is for a home, office, Airbnb unit, or leasing property.</p>
+                <p>Include preferred schedule, frequency, and any urgent turnover or move-in timing.</p>
+                <p>Let us know if you need recurring service, deep cleaning, or staging-ready presentation.</p>
+            </div>
+        </div>
+    </aside>
+</section>
+{% endblock %}

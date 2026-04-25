@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ 'New Contact Field' if not field else 'Edit Contact Field' }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Contact Field</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ 'Create contact field' if not field else 'Edit contact field' }}</h1>
+</section>
+
+<form method="post" action="{% if field %}{{ url_for('edit_contact_field_save', field_id=field.id) }}{% else %}{{ url_for('new_contact_field_save') }}{% endif %}" class="panel grid gap-5 rounded-[2.5rem] p-7 sm:p-10">
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Label
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="label" value="{{ field.label if field else '' }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Name
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="name" value="{{ field.name if field else '' }}" required>
+        </label>
+    </div>
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Field Type
+            <select class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" name="field_type">
+                {% for value in ['text', 'email', 'textarea', 'radio'] %}
+                    <option value="{{ value }}" {% if field and field.field_type == value %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Sort Order
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="number" name="sort_order" value="{{ field.sort_order if field else 0 }}" required>
+        </label>
+    </div>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Placeholder
+        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="placeholder" value="{{ field.placeholder if field else '' }}">
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Options
+        <textarea class="min-h-[10rem] rounded-[2rem] border border-black/10 px-5 py-4 outline-none transition focus:border-brand" name="options">{{ field.options if field else '' }}</textarea>
+        <span class="text-xs font-normal text-ink/60">For radio fields, enter one option per line.</span>
+    </label>
+    <label class="flex items-center gap-3 text-sm font-bold text-ink">
+        <input type="checkbox" name="required" {% if not field or field.required == 'true' %}checked{% endif %}>
+        Required
+    </label>
+    <label class="flex items-center gap-3 text-sm font-bold text-ink">
+        <input type="checkbox" name="is_active" {% if not field or field.is_active == 'true' %}checked{% endif %}>
+        Active
+    </label>
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">{{ 'Create Field' if not field else 'Save Changes' }}</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}

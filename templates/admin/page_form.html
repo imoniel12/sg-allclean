@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ 'New Page' if not page else 'Edit ' ~ page.slug|title }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Page</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ page.slug|title if page else 'Create Page' }}</h1>
+</section>
+
+<form method="post" action="{% if page %}{{ url_for('edit_page_save', slug=page.slug) }}{% else %}{{ url_for('new_page_save') }}{% endif %}" class="panel grid gap-5 rounded-[2.5rem] p-7 sm:p-10">
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Slug
+        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="slug" value="{{ page.slug if page else '' }}" required>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Title
+        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="title" value="{{ page.title if page else '' }}" required>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Subtitle
+        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="subtitle" value="{{ page.subtitle if page else '' }}" required>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Body
+        <textarea class="min-h-[16rem] rounded-[2rem] border border-black/10 px-5 py-4 outline-none transition focus:border-brand" name="body" required>{{ page.body if page else '' }}</textarea>
+    </label>
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            CTA Text
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="cta_text" value="{{ page.cta_text if page else '' }}">
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            CTA Link
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="cta_link" value="{{ page.cta_link if page else '' }}">
+        </label>
+    </div>
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">Save Page</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}

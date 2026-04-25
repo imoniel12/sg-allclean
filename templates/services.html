@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Services | {{ site_settings.company_name }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Services</p>
+    <h1 class="max-w-4xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">Cleaning programs tailored to the way your property operates.</h1>
+    <p class="mt-5 max-w-3xl text-lg leading-8 text-ink/70">
+        Residential, office, and turnover cleaning designed for a premium finish, clear coordination, and repeatable quality.
+    </p>
+</section>
+
+<section class="grid gap-5 lg:grid-cols-3">
+    {% for service in services %}
+        <article class="panel flex h-full flex-col rounded-[2.25rem] p-7">
+            <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#fff3ee] font-heading text-xl font-bold text-brand">
+                {{ service.title[0] }}
+            </div>
+            <div class="mt-5 inline-flex w-fit rounded-full bg-brand/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-brand">
+                {{ service.highlight }}
+            </div>
+            <h2 class="mt-5 text-2xl font-bold text-ink">{{ service.title }}</h2>
+            <p class="mt-4 flex-1 text-sm leading-7 text-ink/70">{{ service.summary }}</p>
+            <a class="card-link mt-6" href="{{ url_for('service_detail', slug=service.slug) }}">Learn more</a>
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}

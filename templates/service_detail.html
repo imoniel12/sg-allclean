@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ service.title }} | {{ site_settings.company_name }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">{{ service.highlight }}</p>
+    <h1 class="max-w-4xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ service.title }}</h1>
+    <p class="mt-5 max-w-3xl text-lg leading-8 text-ink/70">{{ service.summary }}</p>
+</section>
+
+<section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+    <article class="panel rounded-[2.5rem] px-7 py-8 sm:px-10 sm:py-10">
+        <div class="prose prose-lg max-w-none prose-headings:font-heading prose-p:text-ink/75 prose-p:leading-8">
+            {{ service.details|richtext }}
+        </div>
+    </article>
+    <aside class="panel rounded-[2.5rem] bg-[#fff8f4] px-7 py-8">
+        <p class="section-label">Service Fit</p>
+        <h2 class="text-3xl font-bold text-ink">A service built around presentation, timing, and recurring trust.</h2>
+        <div class="mt-6 space-y-4 text-sm leading-7 text-ink/70">
+            <p><span class="font-bold text-ink">Best for:</span> premium homes, office environments, and high-turnover spaces.</p>
+            <p><span class="font-bold text-ink">Coverage:</span> {{ site_settings.coverage }}</p>
+        </div>
+        <a class="btn-primary mt-8 w-full" href="{{ url_for('contact') }}">Contact Us</a>
+    </aside>
+</section>
+{% endblock %}

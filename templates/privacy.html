@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Data Privacy Statement | {{ site_settings.company_name }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Privacy</p>
+    <h1 class="max-w-5xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ page.title }}</h1>
+    <p class="mt-5 max-w-4xl text-lg leading-8 text-ink/70">{{ page.subtitle }}</p>
+</section>
+
+<section class="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+    <aside class="panel rounded-[2.5rem] bg-[#fff8f4] px-7 py-8">
+        <p class="section-label">Quick Summary</p>
+        <div class="space-y-4 text-sm leading-7 text-ink/70">
+            <p>We collect only the information reasonably needed to respond to inquiries, arrange services, manage bookings, and support our client relationship.</p>
+            <p>We do not use your data for unrelated purposes without a lawful basis or your consent where consent is required.</p>
+            <p>If you have questions about your information, contact us at {{ site_settings.contact_email }} or {{ site_settings.contact_phone }}.</p>
+        </div>
+    </aside>
+
+    <article class="panel rounded-[2.5rem] px-7 py-8 sm:px-10 sm:py-10">
+        <div class="prose prose-lg max-w-none prose-headings:font-heading prose-p:text-ink/75 prose-p:leading-8">
+            {{ page.body|richtext }}
+        </div>
+    </article>
+</section>
+{% endblock %}

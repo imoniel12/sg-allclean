@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_settings.company_name if site_settings else "SG AllClean" }}{% endblock %}</title>
+    <meta name="description" content="{{ site_settings.tagline if site_settings else 'Premium cleaning services' }}">
+    <meta name="robots" content="{% if request.url.path.startswith(admin_base_path) %}noindex,nofollow{% else %}index,follow{% endif %}">
+    <link rel="icon" href="/favicon/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: "#f05e31",
+                        "brand-dark": "#d84d24",
+                        ash: "#f5f5f5",
+                        ink: "#333333",
+                        mint: "#3EB489",
+                        "mint-soft": "#E7F6F0"
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        heading: ["Montserrat", "sans-serif"]
+                    },
+                    boxShadow: {
+                        soft: "0 18px 60px rgba(51, 51, 51, 0.08)"
+                    },
+                    backgroundImage: {
+                        "hero-wash": "radial-gradient(circle at top right, rgba(240,94,49,0.18), transparent 26%), radial-gradient(circle at left center, rgba(62,180,137,0.18), transparent 22%), linear-gradient(180deg, #fffaf7 0%, #ffffff 100%)"
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body { @apply bg-white font-sans text-ink antialiased; }
+            h1, h2, h3, h4 { @apply font-heading tracking-[-0.03em]; }
+        }
+        @layer components {
+            .container-shell { @apply mx-auto w-[min(1180px,calc(100%-1.5rem))]; }
+            .section-label { @apply mb-3 text-[0.72rem] font-extrabold uppercase tracking-[0.22em] text-brand; }
+            .panel { @apply rounded-[2rem] border border-mint/15 bg-white shadow-soft; }
+            .nav-link { @apply text-sm font-semibold text-ink/80 transition hover:text-brand; }
+            .nav-link-active { @apply text-brand; }
+            .btn-primary { @apply inline-flex items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-dark; }
+            .btn-secondary { @apply inline-flex items-center justify-center rounded-full border border-mint/30 bg-mint-soft px-6 py-3 text-sm font-bold text-ink transition hover:border-mint hover:text-mint; }
+            .card-link { @apply inline-flex items-center gap-2 text-sm font-bold text-brand transition hover:text-mint; }
+            .admin-chip { @apply inline-flex items-center rounded-full bg-mint-soft px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-mint; }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="bg-hero-wash">
+        <header class="container-shell sticky top-3 z-40 pt-4">
+            <div class="panel flex items-center justify-between gap-4 rounded-full px-4 py-3 backdrop-blur">
+                <a class="flex min-w-0 items-center gap-3" href="{% if is_admin_area %}{{ url_for('admin_dashboard') }}{% else %}{{ url_for('index') }}{% endif %}">
+                    {% if site_settings and site_settings.logo_path %}
+                        <img class="h-12 w-auto max-w-[150px] object-contain" src="{{ site_settings.logo_path }}" alt="{{ site_settings.company_name }} logo">
+                    {% else %}
+                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-mint text-sm font-extrabold text-white">SG</div>
+                    {% endif %}
+                    <div class="min-w-0">
+                        <div class="truncate font-heading text-sm font-bold text-ink">{{ site_settings.company_name if site_settings else "SG AllClean" }}</div>
+                        <div class="truncate text-xs text-ink/60">{% if is_admin_area %}{{ 'Full Admin' if current_admin_user and current_admin_user.role == full_admin_role else 'Content Moderator' }}{% else %}{{ site_settings.tagline if site_settings else "Premium cleaning" }}{% endif %}</div>
+                    </div>
+                </a>
+
+                {% if is_admin_area %}
+                    <nav class="hidden items-center gap-6 lg:flex">
+                        <a class="nav-link {% if current_path == admin_base_path %}nav-link-active{% endif %}" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                        {% if current_admin_user and current_admin_user.role == full_admin_role %}
+                            <a class="nav-link {% if current_path.startswith(admin_base_path ~ '/settings') %}nav-link-active{% endif %}" href="{{ url_for('admin_settings') }}">Settings</a>
+                            <a class="nav-link {% if current_path.startswith(admin_base_path ~ '/users') %}nav-link-active{% endif %}" href="{{ url_for('new_admin_user') }}">Users</a>
+                        {% endif %}
+                        <a class="nav-link {% if current_path.startswith(admin_base_path ~ '/pages') or current_path.startswith(admin_base_path ~ '/services') or current_path.startswith(admin_base_path ~ '/posts') or current_path.startswith(admin_base_path ~ '/contact-fields') or current_path.startswith(admin_base_path ~ '/nav-items') or current_path.startswith(admin_base_path ~ '/homepage-content') %}nav-link-active{% endif %}" href="{{ url_for('admin_dashboard') }}">Content</a>
+                        <a class="btn-primary" href="{{ url_for('admin_logout') }}">Sign Out</a>
+                    </nav>
+                    <a class="btn-primary lg:hidden" href="{{ url_for('admin_dashboard') }}">Admin</a>
+                {% else %}
+                    <nav class="hidden items-center gap-6 lg:flex">
+                        {% for item in nav_items if item.is_button != 'true' %}
+                            <a class="nav-link {% if current_path == item.path or (item.path != '/' and current_path.startswith(item.path)) %}nav-link-active{% endif %}" href="{{ item.path }}">{{ item.label }}</a>
+                        {% endfor %}
+                        {% for item in nav_items if item.is_button == 'true' %}
+                            <a class="btn-primary" href="{{ item.path }}">{{ item.label }}</a>
+                        {% endfor %}
+                    </nav>
+                    {% set mobile_cta = (nav_items | selectattr('is_button', 'equalto', 'true') | list | first) %}
+                    <a class="btn-primary lg:hidden" href="{{ mobile_cta.path if mobile_cta else url_for('contact') }}">{{ mobile_cta.label if mobile_cta else 'Contact' }}</a>
+                {% endif %}
+            </div>
+        </header>
+
+        {% if messages %}
+            <div class="container-shell mt-6 space-y-3">
+                {% for item in messages %}
+                    <div class="panel rounded-3xl px-5 py-4 text-sm {% if item.category == 'error' %}border-brand/30 text-brand-dark{% else %}text-ink{% endif %}">
+                        {{ item.message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <main class="container-shell pb-20 pt-8">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <footer class="border-t border-black/5 bg-[#fff8f4]">
+        <div class="container-shell grid gap-10 py-12 md:grid-cols-[1.2fr_0.8fr]">
+            <div class="space-y-3">
+                <p class="section-label">{{ footer_content.get('footer.badge', 'Premium Property Care') }}</p>
+                <h2 class="max-w-xl text-3xl font-bold text-ink sm:text-4xl">{{ site_settings.company_name if site_settings else "SG AllClean" }}</h2>
+                <p class="max-w-xl text-sm leading-7 text-ink/70">
+                    {{ footer_content.get('footer.body', 'Reliable cleaning for city homes, offices, and high-turnover properties with a calm, polished client experience.') }}
+                </p>
+            </div>
+            <div class="grid gap-6 text-sm text-ink/70 sm:grid-cols-2 md:grid-cols-1">
+                <div>
+                    <div class="font-heading text-base font-bold text-ink">{{ footer_content.get('footer.coverage_title', 'Coverage') }}</div>
+                    <p class="mt-2 leading-7">{{ site_settings.coverage if site_settings else "" }}</p>
+                </div>
+                <div>
+                    <div class="font-heading text-base font-bold text-ink">{{ footer_content.get('footer.contact_title', 'Contact') }}</div>
+                    <p class="mt-2 leading-7">{{ site_settings.contact_email if site_settings else "" }}<br>{{ site_settings.contact_phone if site_settings else "" }}</p>
+                </div>
+                <div>
+                    <div class="font-heading text-base font-bold text-ink">{{ footer_content.get('footer.policies_title', 'Policies') }}</div>
+                    <p class="mt-2 leading-7"><a class="hover:text-mint" href="{{ url_for('privacy') }}">{{ footer_content.get('footer.privacy_label', 'Data Privacy Statement') }}</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% if not is_admin_area %}
+        {% set mobile_cta = (nav_items | selectattr('is_button', 'equalto', 'true') | list | first) %}
+        <a class="fixed bottom-4 left-4 right-4 z-50 inline-flex items-center justify-center rounded-full bg-brand px-6 py-4 text-sm font-extrabold text-white shadow-soft lg:hidden" href="{{ mobile_cta.path if mobile_cta else url_for('contact') }}">
+            {{ mobile_cta.label if mobile_cta else 'Contact' }}
+        </a>
+    {% endif %}
+</body>
+</html>

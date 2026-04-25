@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit User" if managed_user else "New User" }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">User Management</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ "Edit admin access" if managed_user else "Create an admin account" }}</h1>
+    <p class="mt-5 max-w-3xl text-lg leading-8 text-ink/70">Full admins can manage settings, navigation, and users. Content moderators can manage public-facing content only.</p>
+</section>
+
+<form method="post" action="{{ url_for('edit_admin_user_save', user_id=managed_user.id) if managed_user else url_for('new_admin_user_save') }}" class="panel grid gap-5 rounded-[2.5rem] border-mint/25 p-7 sm:p-10">
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Username
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="username" value="{{ managed_user.username if managed_user else '' }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Role
+            <select class="rounded-3xl border border-mint/20 bg-white px-5 py-4 outline-none transition focus:border-mint" name="role" required>
+                <option value="full_admin" {% if managed_user and managed_user.role == 'full_admin' %}selected{% endif %}>Full Admin</option>
+                <option value="content_moderator" {% if not managed_user or managed_user.role == 'content_moderator' %}selected{% endif %}>Content Moderator</option>
+            </select>
+        </label>
+    </div>
+
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        {{ "New Password" if managed_user else "Password" }}
+        <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="password" name="password" {% if not managed_user %}required{% endif %}>
+        {% if managed_user %}
+            <span class="text-xs font-medium text-ink/60">Leave blank to keep the current password.</span>
+        {% endif %}
+    </label>
+
+    <label class="inline-flex items-center gap-3 rounded-3xl border border-mint/20 bg-mint-soft/40 px-5 py-4 text-sm font-bold text-ink">
+        <input class="h-4 w-4 accent-mint" type="checkbox" name="is_active" {% if not managed_user or managed_user.is_active == 'true' %}checked{% endif %}>
+        Active account
+    </label>
+
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">{{ "Save User" if managed_user else "Create User" }}</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}

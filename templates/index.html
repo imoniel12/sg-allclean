@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block title %}{{ settings.company_name }}{% endblock %}
+{% block content %}
+<section class="grid gap-10 pb-10 pt-4 xl:grid-cols-[1.08fr_0.92fr] xl:items-center">
+    <div class="space-y-6">
+        <p class="section-label">{{ homepage.get('home.hero_badge', 'Premium Housekeeping') }}</p>
+        <h1 class="max-w-[10ch] text-5xl font-extrabold leading-[0.92] text-ink sm:text-6xl lg:text-7xl">
+            {{ settings.hero_title }}
+        </h1>
+        <p class="max-w-2xl text-base leading-8 text-ink/70 sm:text-lg">
+            {{ settings.hero_subtitle }}
+        </p>
+        <div class="flex flex-wrap gap-3">
+            <a class="btn-primary" href="{{ url_for('contact') }}">Contact</a>
+            <a class="btn-secondary" href="{{ url_for('services') }}">See Services</a>
+        </div>
+        <div class="grid max-w-2xl gap-4 pt-4 sm:grid-cols-3">
+            <div class="rounded-[1.75rem] border border-mint/15 bg-mint-soft/60 px-5 py-4">
+                <div class="font-heading text-lg font-bold text-ink">{{ homepage.get('home.feature_1_title', 'Condo-ready') }}</div>
+                <p class="mt-2 text-sm leading-6 text-ink/65">{{ homepage.get('home.feature_1_body', 'For Makati, BGC, Ortigas, and premium urban residences.') }}</p>
+            </div>
+            <div class="rounded-[1.75rem] border border-mint/15 bg-mint-soft/60 px-5 py-4">
+                <div class="font-heading text-lg font-bold text-ink">{{ homepage.get('home.feature_2_title', 'Turnover-fast') }}</div>
+                <p class="mt-2 text-sm leading-6 text-ink/65">{{ homepage.get('home.feature_2_body', 'Built for Airbnb schedules, leasing prep, and office resets.') }}</p>
+            </div>
+            <div class="rounded-[1.75rem] border border-mint/15 bg-mint-soft/60 px-5 py-4">
+                <div class="font-heading text-lg font-bold text-ink">{{ homepage.get('home.feature_3_title', 'Trust-led') }}</div>
+                <p class="mt-2 text-sm leading-6 text-ink/65">{{ homepage.get('home.feature_3_body', 'Professional staff, consistent standards, and premium presentation.') }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative pt-6 xl:pt-0">
+        <div class="pointer-events-none absolute right-4 top-2 hidden h-72 w-72 rounded-full bg-brand/10 xl:block"></div>
+        <div class="pointer-events-none absolute bottom-10 left-2 hidden h-32 w-32 rounded-full border border-mint/50 bg-mint/10 xl:block"></div>
+        <div class="panel relative mx-auto w-full max-w-[31rem] rounded-[2.5rem] p-8 xl:mt-12 xl:ml-auto">
+            <p class="section-label">Coverage</p>
+            <h2 class="text-3xl font-bold text-ink">{{ settings.location }}</h2>
+            <p class="mt-3 max-w-md text-sm leading-7 text-ink/70">{{ settings.coverage }}</p>
+            <div class="mt-8 grid grid-cols-2 gap-4">
+                <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-[#fff3ee] text-center">
+                    <span class="font-heading text-xl font-bold text-ink">{{ homepage.get('home.metric_1_value', '47%') }}</span>
+                    <span class="mt-1 max-w-[9ch] text-xs font-semibold uppercase tracking-[0.15em] text-ink/55">{{ homepage.get('home.metric_1_label', 'margin outlook') }}</span>
+                </div>
+                <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-[#fff3ee] text-center">
+                    <span class="font-heading text-xl font-bold text-ink">{{ homepage.get('home.metric_2_value', '3') }}</span>
+                    <span class="mt-1 max-w-[9ch] text-xs font-semibold uppercase tracking-[0.15em] text-ink/55">{{ homepage.get('home.metric_2_label', 'service lines') }}</span>
+                </div>
+                <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-[#fff3ee] text-center">
+                    <span class="font-heading text-xl font-bold text-ink">{{ homepage.get('home.metric_3_value', 'Hotel') }}</span>
+                    <span class="mt-1 max-w-[9ch] text-xs font-semibold uppercase tracking-[0.15em] text-ink/55">{{ homepage.get('home.metric_3_label', 'quality feel') }}</span>
+                </div>
+                <div class="flex aspect-square flex-col items-center justify-center rounded-full bg-[#fff3ee] text-center">
+                    <span class="font-heading text-xl font-bold text-ink">{{ homepage.get('home.metric_4_value', 'Fast') }}</span>
+                    <span class="mt-1 max-w-[9ch] text-xs font-semibold uppercase tracking-[0.15em] text-ink/55">{{ homepage.get('home.metric_4_label', 'booking flow') }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="grid gap-5 border-y border-black/5 py-6 md:grid-cols-[0.72fr_1.28fr] md:items-start">
+    <div>
+        <p class="section-label">Notifications</p>
+        <h2 class="text-2xl font-bold text-ink">{{ homepage.get('home.notifications_title', "What's new at AllClean") }}</h2>
+    </div>
+    <div class="grid gap-3">
+        <div class="panel flex flex-col gap-2 rounded-[1.75rem] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <div class="text-sm font-bold text-brand">{{ homepage.get('home.notice_1_label', 'Service Update') }}</div>
+                <p class="mt-1 text-sm text-ink/70">{{ homepage.get('home.notice_1_body', 'Now offering premium turnover cleaning for Airbnb and leasing-ready units.') }}</p>
+            </div>
+            <span class="text-xs font-semibold uppercase tracking-[0.2em] text-ink/45">{{ homepage.get('home.notice_1_tag', 'New') }}</span>
+        </div>
+        <div class="panel flex flex-col gap-2 rounded-[1.75rem] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <div class="text-sm font-bold text-brand">{{ homepage.get('home.notice_2_label', 'Brand Focus') }}</div>
+                <p class="mt-1 text-sm text-ink/70">{{ homepage.get('home.notice_2_body', 'Refined for modern city living, recurring support, and presentation-first care.') }}</p>
+            </div>
+            <span class="text-xs font-semibold uppercase tracking-[0.2em] text-ink/45">{{ homepage.get('home.notice_2_tag', 'Current') }}</span>
+        </div>
+    </div>
+</section>
+
+<section class="py-14">
+    <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="section-label">Top Picks</p>
+            <h2 class="max-w-2xl text-3xl font-bold text-ink sm:text-4xl">{{ homepage.get('home.top_picks_title', 'Quick ways to understand what makes AllClean different.') }}</h2>
+        </div>
+        <a class="card-link" href="{{ url_for('about') }}">{{ homepage.get('home.top_picks_link', 'About the brand') }}</a>
+    </div>
+    <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <a class="panel rounded-[2rem] p-6 transition hover:-translate-y-1" href="{{ url_for('about') }}">
+            <div class="section-label">01</div>
+            <h3 class="text-xl font-bold text-ink">{{ homepage.get('home.pick_1_title', 'Why AllClean') }}</h3>
+            <p class="mt-3 text-sm leading-7 text-ink/70">{{ homepage.get('home.pick_1_body', 'A premium cleaning experience designed for peace of mind, not just task completion.') }}</p>
+        </a>
+        <a class="panel rounded-[2rem] p-6 transition hover:-translate-y-1" href="{{ url_for('services') }}">
+            <div class="section-label">02</div>
+            <h3 class="text-xl font-bold text-ink">{{ homepage.get('home.pick_2_title', 'Services') }}</h3>
+            <p class="mt-3 text-sm leading-7 text-ink/70">{{ homepage.get('home.pick_2_body', 'Residential, office, and turnover support shaped around city schedules and high standards.') }}</p>
+        </a>
+        <a class="panel rounded-[2rem] p-6 transition hover:-translate-y-1" href="{{ url_for('journal') }}">
+            <div class="section-label">03</div>
+            <h3 class="text-xl font-bold text-ink">{{ homepage.get('home.pick_3_title', 'Journal') }}</h3>
+            <p class="mt-3 text-sm leading-7 text-ink/70">{{ homepage.get('home.pick_3_body', 'Brand stories, care tips, and updates that make the service feel more transparent and human.') }}</p>
+        </a>
+        <a class="panel rounded-[2rem] p-6 transition hover:-translate-y-1" href="{{ url_for('contact') }}">
+            <div class="section-label">04</div>
+            <h3 class="text-xl font-bold text-ink">{{ homepage.get('home.pick_4_title', 'Contact') }}</h3>
+            <p class="mt-3 text-sm leading-7 text-ink/70">{{ homepage.get('home.pick_4_body', 'Start with a conversation about your property, frequency, and service expectations.') }}</p>
+        </a>
+    </div>
+</section>
+
+<section class="grid gap-8 py-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+    <div>
+        <p class="section-label">{{ homepage.get('home.whats_title', "What's AllClean?") }}</p>
+        <h2 class="max-w-md text-3xl font-bold text-ink sm:text-4xl">{{ settings.intro_title }}</h2>
+    </div>
+    <div class="space-y-6 text-base leading-8 text-ink/72">
+        <p>{{ settings.intro_body }}</p>
+        <p>{{ settings.investment_note }}</p>
+        <a class="card-link" href="{{ url_for('about') }}">Read our story</a>
+    </div>
+</section>
+
+<section class="py-14">
+    <div>
+        <p class="section-label">Reasons</p>
+        <h2 class="max-w-3xl text-3xl font-bold text-ink sm:text-4xl">{{ homepage.get('home.reasons_title', 'Why clients choose AllClean for recurring, detail-led property care.') }}</h2>
+    </div>
+    <div class="mt-10 grid gap-6 lg:grid-cols-3">
+        <article class="panel rounded-[2.25rem] p-7">
+            <div class="text-sm font-extrabold uppercase tracking-[0.2em] text-brand">01</div>
+            <h3 class="mt-4 text-2xl font-bold text-ink">{{ homepage.get('home.reason_1_title', 'Trained, presentation-first teams') }}</h3>
+            <p class="mt-4 text-sm leading-7 text-ink/70">{{ homepage.get('home.reason_1_body', 'We are built around professionalism, safe materials, dependable routines, and cleaner finishes that hold up to premium client expectations.') }}</p>
+        </article>
+        <article class="panel rounded-[2.25rem] p-7">
+            <div class="text-sm font-extrabold uppercase tracking-[0.2em] text-brand">02</div>
+            <h3 class="mt-4 text-2xl font-bold text-ink">{{ homepage.get('home.reason_2_title', 'Designed for modern urban schedules') }}</h3>
+            <p class="mt-4 text-sm leading-7 text-ink/70">{{ homepage.get('home.reason_2_body', 'From condos and offices to Airbnb turnovers, we shape service around real occupancy patterns, guest deadlines, and repeat bookings.') }}</p>
+        </article>
+        <article class="panel rounded-[2.25rem] p-7">
+            <div class="text-sm font-extrabold uppercase tracking-[0.2em] text-brand">03</div>
+            <h3 class="mt-4 text-2xl font-bold text-ink">{{ homepage.get('home.reason_3_title', 'A trustworthy recurring model') }}</h3>
+            <p class="mt-4 text-sm leading-7 text-ink/70">{{ homepage.get('home.reason_3_body', 'Clients are not just buying cleaning. They are buying time back, consistency, smoother turnovers, and confidence that standards will be met.') }}</p>
+        </article>
+    </div>
+</section>
+
+<section class="py-14">
+    <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="section-label">Services</p>
+            <h2 class="max-w-2xl text-3xl font-bold text-ink sm:text-4xl">{{ homepage.get('home.services_title', 'Core offerings for homes, offices, and booking-ready spaces.') }}</h2>
+        </div>
+        <a class="card-link" href="{{ url_for('services') }}">{{ homepage.get('home.services_link', 'View all services') }}</a>
+    </div>
+    <div class="mt-8 grid gap-5 lg:grid-cols-3">
+        {% for service in services %}
+            <article class="panel flex h-full flex-col rounded-[2.25rem] p-7">
+                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#fff3ee] font-heading text-xl font-bold text-brand">
+                    {{ service.title[0] }}
+                </div>
+                <div class="mt-5 inline-flex w-fit rounded-full bg-brand/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-brand">
+                    {{ service.highlight }}
+                </div>
+                <h3 class="mt-5 text-2xl font-bold text-ink">{{ service.title }}</h3>
+                <p class="mt-4 flex-1 text-sm leading-7 text-ink/70">{{ service.summary }}</p>
+                <a class="card-link mt-6" href="{{ url_for('service_detail', slug=service.slug) }}">Learn more</a>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="py-14">
+    <div>
+        <p class="section-label">Safe And Secure</p>
+        <h2 class="max-w-2xl text-3xl font-bold text-ink sm:text-4xl">{{ homepage.get('home.safe_title', 'Cleaner spaces should also feel professionally handled from start to finish.') }}</h2>
+    </div>
+    <div class="mt-8 grid gap-5 lg:grid-cols-2">
+        <article class="panel rounded-[2.25rem] border-mint/15 bg-mint-soft/40 p-7">
+            <h3 class="text-2xl font-bold text-ink">{{ homepage.get('home.safe_1_title', 'Privacy, professionalism, and care') }}</h3>
+            <p class="mt-4 text-sm leading-7 text-ink/70">{{ homepage.get('home.safe_1_body', 'We aim for a calm client experience with dependable communication, careful handling of property spaces, and a service tone that feels polished and trustworthy.') }}</p>
+        </article>
+        <article class="panel rounded-[2.25rem] border-mint/15 bg-mint-soft/40 p-7">
+            <h3 class="text-2xl font-bold text-ink">{{ homepage.get('home.safe_2_title', 'Healthy-space mindset') }}</h3>
+            <p class="mt-4 text-sm leading-7 text-ink/70">{{ homepage.get('home.safe_2_body', 'Clean materials, sanitary routines, and attention to high-touch areas help create safer environments for homes, offices, guests, and teams.') }}</p>
+        </article>
+    </div>
+</section>
+
+<section class="py-14">
+    <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="section-label">Journal</p>
+            <h2 class="max-w-2xl text-3xl font-bold text-ink sm:text-4xl">{{ homepage.get('home.journal_title', 'Updates and useful content that support trust around the service.') }}</h2>
+        </div>
+        <a class="card-link" href="{{ url_for('journal') }}">{{ homepage.get('home.journal_link', 'Open journal') }}</a>
+    </div>
+    <div class="mt-8 grid gap-5 lg:grid-cols-3">
+        {% for post in posts %}
+            <article class="panel flex h-full flex-col rounded-[2.25rem] p-7">
+                <div class="text-xs font-bold uppercase tracking-[0.2em] text-brand">Article</div>
+                <h3 class="mt-5 text-2xl font-bold text-ink">{{ post.title }}</h3>
+                <p class="mt-4 flex-1 text-sm leading-7 text-ink/70">{{ post.excerpt }}</p>
+                <a class="card-link mt-6" href="{{ url_for('post_detail', slug=post.slug) }}">Read article</a>
+            </article>
+        {% else %}
+            <article class="panel rounded-[2.25rem] p-7 lg:col-span-3">
+                <h3 class="text-2xl font-bold text-ink">Fresh updates are coming soon</h3>
+                <p class="mt-3 max-w-2xl text-sm leading-7 text-ink/70">Use the CMS to publish announcements, service tips, testimonials, and trust-building content for future clients.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="panel mt-8 rounded-[2.5rem] bg-[#fff8f4] px-7 py-10 sm:px-10">
+    <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+            <p class="section-label">{{ homepage.get('home.cta_badge', 'Contact Us') }}</p>
+            <h2 class="max-w-2xl text-3xl font-bold text-ink sm:text-4xl">{{ homepage.get('home.cta_title', "Tell us about your property and we'll shape the right cleaning routine.") }}</h2>
+            <p class="mt-4 max-w-2xl text-sm leading-7 text-ink/70">{{ homepage.get('home.cta_body', 'Residential cleaning, office maintenance, and Airbnb turnover support across your preferred service areas.') }}</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+            <a class="btn-primary" href="{{ url_for('contact') }}">{{ homepage.get('home.cta_primary', 'Contact Us') }}</a>
+            <a class="btn-secondary" href="mailto:{{ settings.contact_email }}">{{ homepage.get('home.cta_secondary', 'Email Us') }}</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

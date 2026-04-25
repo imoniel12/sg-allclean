@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: "#f05e31",
+                        "brand-dark": "#d84d24",
+                        ink: "#333333",
+                        mint: "#3EB489",
+                        "mint-soft": "#E7F6F0"
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        heading: ["Montserrat", "sans-serif"]
+                    },
+                    boxShadow: {
+                        soft: "0 18px 60px rgba(51, 51, 51, 0.08)"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-[radial-gradient(circle_at_top_right,rgba(240,94,49,0.16),transparent_24%),radial-gradient(circle_at_left_center,rgba(62,180,137,0.18),transparent_26%),linear-gradient(180deg,#fff8f4_0%,#ffffff_100%)] font-sans text-ink">
+    <main class="mx-auto flex min-h-screen w-[min(520px,calc(100%-1.5rem))] items-center">
+        <section class="w-full rounded-[2rem] border border-mint/15 bg-white p-8 shadow-soft sm:p-10">
+            <p class="mb-3 text-[0.72rem] font-extrabold uppercase tracking-[0.22em] text-brand">CMS Access</p>
+            <h1 class="font-heading text-4xl font-extrabold tracking-[-0.03em] text-ink">Manage SG AllClean</h1>
+            <p class="mt-4 text-sm leading-7 text-ink/70">Use your admin account to manage pages, services, posts, users, and uploaded branding assets.</p>
+            {% if messages %}
+                <div class="mt-5 space-y-3">
+                    {% for item in messages %}
+                        <div class="rounded-3xl border border-mint/30 bg-mint-soft px-4 py-3 text-sm text-ink">{{ item.message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form method="post" action="{{ url_for('admin_login_submit') }}" class="mt-8 grid gap-4">
+                <label class="grid gap-2 text-sm font-bold text-ink">
+                    Username
+                    <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="username" required>
+                </label>
+                <label class="grid gap-2 text-sm font-bold text-ink">
+                    Password
+                    <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="password" name="password" required>
+                </label>
+                <button class="mt-2 inline-flex items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-dark" type="submit">Sign In</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

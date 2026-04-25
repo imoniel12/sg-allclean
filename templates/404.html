@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+{% block content %}
+<section class="flex min-h-[65vh] items-center py-10">
+    <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div class="space-y-6">
+            <p class="section-label">404 Error</p>
+            <h1 class="max-w-3xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">That page could not be found.</h1>
+            <p class="max-w-2xl text-lg leading-8 text-ink/70">
+                The link may be outdated, the address may have been typed incorrectly, or the page may have been moved.
+                {% if missing_path %}
+                You tried to open <span class="font-semibold text-ink">{{ missing_path }}</span>.
+                {% endif %}
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <a class="btn-primary" href="{{ url_for('index') }}">Back To Home</a>
+                <a class="btn-secondary" href="{{ url_for('contact') }}">Contact SG AllClean</a>
+            </div>
+        </div>
+
+        <div class="panel rounded-[2.5rem] border-mint/25 bg-white/90 p-8 sm:p-10">
+            <div class="grid gap-5">
+                <div class="rounded-[2rem] border border-black/5 p-6">
+                    <div class="font-heading text-2xl font-bold text-ink">Popular pages</div>
+                    <div class="mt-4 flex flex-wrap gap-3">
+                        <a class="btn-secondary" href="{{ url_for('about') }}">About</a>
+                        <a class="btn-secondary" href="{{ url_for('services') }}">Services</a>
+                        <a class="btn-secondary" href="{{ url_for('journal') }}">Journal</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

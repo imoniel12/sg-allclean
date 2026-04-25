@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | {{ site_settings.company_name }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">{{ post.status }}</p>
+    <h1 class="max-w-4xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ post.title }}</h1>
+    <p class="mt-5 max-w-3xl text-lg leading-8 text-ink/70">{{ post.excerpt }}</p>
+</section>
+
+<section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+    <article class="panel rounded-[2.5rem] px-7 py-8 sm:px-10 sm:py-10">
+        {% if post.image_path %}
+            <img class="mb-8 h-72 w-full rounded-[2rem] object-cover" src="{{ post.image_path }}" alt="{{ post.title }}">
+        {% endif %}
+        <div class="prose prose-lg max-w-none prose-headings:font-heading prose-p:text-ink/75 prose-p:leading-8">
+            {{ post.body|richtext }}
+        </div>
+    </article>
+    <aside class="panel rounded-[2.5rem] bg-[#fff8f4] px-7 py-8">
+        <p class="section-label">Keep Reading</p>
+        <h2 class="text-3xl font-bold text-ink">Thoughtful content helps a premium service feel more transparent.</h2>
+        <p class="mt-4 text-sm leading-7 text-ink/70">Use this space for company updates, practical cleaning advice, and trust-building client education.</p>
+        <a class="btn-secondary mt-8 w-full" href="{{ url_for('journal') }}">Back to Journal</a>
+    </aside>
+</section>
+{% endblock %}

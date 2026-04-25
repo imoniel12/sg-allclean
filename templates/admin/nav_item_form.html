@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ 'New Nav Item' if not item else 'Edit Nav Item' }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Navigation Item</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ 'Create navigation item' if not item else 'Edit navigation item' }}</h1>
+</section>
+
+<form method="post" action="{% if item %}{{ url_for('edit_nav_item_save', item_id=item.id) }}{% else %}{{ url_for('new_nav_item_save') }}{% endif %}" class="panel grid gap-5 rounded-[2.5rem] border-mint/25 p-7 sm:p-10">
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Label
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="label" value="{{ item.label if item else '' }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Path
+            <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="text" name="path" value="{{ item.path if item else '' }}" required>
+        </label>
+    </div>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Sort Order
+        <input class="rounded-3xl border border-mint/20 px-5 py-4 outline-none transition focus:border-mint" type="number" name="sort_order" value="{{ item.sort_order if item else 0 }}" required>
+    </label>
+    <label class="flex items-center gap-3 rounded-3xl border border-mint/20 bg-mint-soft/40 px-5 py-4 text-sm font-bold text-ink">
+        <input class="h-4 w-4 accent-mint" type="checkbox" name="is_button" {% if item and item.is_button == 'true' %}checked{% endif %}>
+        Render as button
+    </label>
+    <label class="flex items-center gap-3 rounded-3xl border border-mint/20 bg-mint-soft/40 px-5 py-4 text-sm font-bold text-ink">
+        <input class="h-4 w-4 accent-mint" type="checkbox" name="is_active" {% if not item or item.is_active == 'true' %}checked{% endif %}>
+        Active
+    </label>
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">{{ 'Create Item' if not item else 'Save Changes' }}</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}

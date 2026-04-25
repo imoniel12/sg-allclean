@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ 'New Service' if not service else 'Edit Service' }}{% endblock %}
+{% block content %}
+<section class="py-10">
+    <p class="section-label">Service</p>
+    <h1 class="text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ 'Create a new service' if not service else 'Edit service' }}</h1>
+</section>
+
+<form method="post" action="{% if service %}{{ url_for('edit_service_save', service_id=service.id) }}{% else %}{{ url_for('new_service_save') }}{% endif %}" class="panel grid gap-5 rounded-[2.5rem] p-7 sm:p-10">
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Title
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="title" value="{{ service.title if service else '' }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Slug
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="slug" value="{{ service.slug if service else '' }}" placeholder="auto-generated if left blank">
+        </label>
+    </div>
+    <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Summary
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="summary" value="{{ service.summary if service else '' }}" required>
+        </label>
+        <label class="grid gap-2 text-sm font-bold text-ink">
+            Highlight
+            <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="text" name="highlight" value="{{ service.highlight if service else '' }}" required>
+        </label>
+    </div>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Sort Order
+        <input class="rounded-3xl border border-black/10 px-5 py-4 outline-none transition focus:border-brand" type="number" name="sort_order" value="{{ service.sort_order if service else 0 }}" required>
+    </label>
+    <label class="grid gap-2 text-sm font-bold text-ink">
+        Details
+        <textarea class="min-h-[16rem] rounded-[2rem] border border-black/10 px-5 py-4 outline-none transition focus:border-brand" name="details" required>{{ service.details if service else '' }}</textarea>
+    </label>
+    <div class="flex flex-wrap gap-3 pt-2">
+        <button class="btn-primary" type="submit">{{ 'Create Service' if not service else 'Save Changes' }}</button>
+        <a class="btn-secondary" href="{{ url_for('admin_dashboard') }}">Back</a>
+    </div>
+</form>
+{% endblock %}
