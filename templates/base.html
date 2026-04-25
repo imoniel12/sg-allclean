@@ -65,11 +65,14 @@
         <header class="container-shell sticky top-3 z-40 pt-4">
             <div class="panel flex items-center justify-between gap-4 rounded-[2rem] px-4 py-3 backdrop-blur lg:rounded-full">
                 <a class="flex min-w-0 items-center gap-3" href="{% if is_admin_area %}{{ url_for('admin_dashboard') }}{% else %}{{ url_for('index') }}{% endif %}">
-                    {% if site_settings and site_settings.logo_path %}
-                        <img class="h-12 w-auto max-w-[150px] object-contain" src="{{ site_settings.logo_path }}" alt="{{ site_settings.company_name }} logo">
-                    {% else %}
-                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-mint text-sm font-extrabold text-white">SG</div>
-                    {% endif %}
+                    <div class="flex shrink-0 items-center justify-center">
+                        {% if site_settings and site_settings.logo_path %}
+                            <img class="h-12 w-auto max-w-[150px] object-contain" src="{{ site_settings.logo_path }}" alt="{{ site_settings.company_name }} logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden h-12 w-12 items-center justify-center rounded-full bg-brand text-sm font-extrabold text-white">SG</div>
+                        {% else %}
+                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-brand text-sm font-extrabold text-white">SG</div>
+                        {% endif %}
+                    </div>
                     <div class="min-w-0">
                         <div class="truncate font-heading text-sm font-bold text-ink">{{ site_settings.company_name if site_settings else "SG AllClean" }}</div>
                         <div class="truncate text-xs text-ink/60">{% if is_admin_area %}{{ 'Full Admin' if current_admin_user and current_admin_user.role == full_admin_role else 'Content Moderator' }}{% else %}{{ site_settings.tagline if site_settings else "Premium cleaning" }}{% endif %}</div>
