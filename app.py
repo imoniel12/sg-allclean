@@ -71,6 +71,8 @@ IS_SQLITE = DATABASE_URL.startswith("sqlite")
 engine_kwargs = {"pool_pre_ping": True}
 if IS_SQLITE:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
+elif DATABASE_URL.startswith("postgresql+psycopg://"):
+    engine_kwargs["connect_args"] = {"prepare_threshold": None}
 engine = create_engine(DATABASE_URL, **engine_kwargs)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
@@ -768,6 +770,13 @@ def index(request: Request):
 @app.get("/favicon.ico", include_in_schema=False)
 def favicon_ico():
     return FileResponse(FAVICON_DIR / "favicon.ico")
+
+
+@app.get("/health", include_in_schema=False)
+@app.get("/kaithhealthcheck", include_in_schema=False)
+@app.get("/kaithheathcheck", include_in_schema=False)
+def healthcheck():
+    return {"status": "ok"}
 
 
 @app.get("/about", name="about")
