@@ -60,9 +60,10 @@
     </style>
 </head>
 <body class="bg-white">
+    {% set mobile_cta = (nav_items | selectattr('is_button', 'equalto', 'true') | list | first) if not is_admin_area else none %}
     <div class="bg-hero-wash">
         <header class="container-shell sticky top-3 z-40 pt-4">
-            <div class="panel flex items-center justify-between gap-4 rounded-full px-4 py-3 backdrop-blur">
+            <div class="panel flex items-center justify-between gap-4 rounded-[2rem] px-4 py-3 backdrop-blur lg:rounded-full">
                 <a class="flex min-w-0 items-center gap-3" href="{% if is_admin_area %}{{ url_for('admin_dashboard') }}{% else %}{{ url_for('index') }}{% endif %}">
                     {% if site_settings and site_settings.logo_path %}
                         <img class="h-12 w-auto max-w-[150px] object-contain" src="{{ site_settings.logo_path }}" alt="{{ site_settings.company_name }} logo">
@@ -85,7 +86,21 @@
                         <a class="nav-link {% if current_path.startswith(admin_base_path ~ '/pages') or current_path.startswith(admin_base_path ~ '/services') or current_path.startswith(admin_base_path ~ '/posts') or current_path.startswith(admin_base_path ~ '/contact-fields') or current_path.startswith(admin_base_path ~ '/nav-items') or current_path.startswith(admin_base_path ~ '/homepage-content') %}nav-link-active{% endif %}" href="{{ url_for('admin_dashboard') }}">Content</a>
                         <a class="btn-primary" href="{{ url_for('admin_logout') }}">Sign Out</a>
                     </nav>
-                    <a class="btn-primary lg:hidden" href="{{ url_for('admin_dashboard') }}">Admin</a>
+                    <details class="relative lg:hidden">
+                        <summary class="flex h-12 w-12 cursor-pointer list-none items-center justify-center rounded-full border border-mint/20 bg-mint-soft text-ink marker:content-['']">
+                            <span class="text-[0.7rem] font-bold uppercase tracking-[0.18em]">Menu</span>
+                        </summary>
+                        <div class="absolute right-0 mt-3 w-64 rounded-[1.75rem] border border-mint/20 bg-white p-3 shadow-soft">
+                            <div class="grid gap-2">
+                                <a class="rounded-2xl px-4 py-3 text-sm font-semibold {% if current_path == admin_base_path %}bg-mint-soft text-mint{% else %}text-ink/80{% endif %}" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                                {% if current_admin_user and current_admin_user.role == full_admin_role %}
+                                    <a class="rounded-2xl px-4 py-3 text-sm font-semibold {% if current_path.startswith(admin_base_path ~ '/settings') %}bg-mint-soft text-mint{% else %}text-ink/80{% endif %}" href="{{ url_for('admin_settings') }}">Settings</a>
+                                    <a class="rounded-2xl px-4 py-3 text-sm font-semibold {% if current_path.startswith(admin_base_path ~ '/users') %}bg-mint-soft text-mint{% else %}text-ink/80{% endif %}" href="{{ url_for('new_admin_user') }}">Users</a>
+                                {% endif %}
+                                <a class="rounded-2xl px-4 py-3 text-sm font-semibold text-ink/80" href="{{ url_for('admin_logout') }}">Sign Out</a>
+                            </div>
+                        </div>
+                    </details>
                 {% else %}
                     <nav class="hidden items-center gap-6 lg:flex">
                         {% for item in nav_items if item.is_button != 'true' %}
@@ -95,11 +110,41 @@
                             <a class="btn-primary" href="{{ item.path }}">{{ item.label }}</a>
                         {% endfor %}
                     </nav>
-                    {% set mobile_cta = (nav_items | selectattr('is_button', 'equalto', 'true') | list | first) %}
-                    <a class="btn-primary lg:hidden" href="{{ mobile_cta.path if mobile_cta else url_for('contact') }}">{{ mobile_cta.label if mobile_cta else 'Contact' }}</a>
+                    <button class="flex h-12 w-12 items-center justify-center rounded-full border border-mint/20 bg-mint-soft text-ink lg:hidden" type="button" data-mobile-drawer-open aria-label="Open menu" aria-controls="mobile-site-drawer" aria-expanded="false">
+                        <span class="text-[0.7rem] font-bold uppercase tracking-[0.18em]">Menu</span>
+                    </button>
                 {% endif %}
             </div>
         </header>
+
+        {% if not is_admin_area %}
+            <div id="mobile-site-drawer" class="pointer-events-none fixed inset-0 z-[70] lg:hidden" aria-hidden="true">
+                <div class="absolute inset-0 bg-black/35 opacity-0 transition-opacity duration-300" data-mobile-drawer-close></div>
+                <div class="absolute right-0 top-0 flex h-full w-[min(24rem,100%)] translate-x-full flex-col bg-white shadow-soft transition-transform duration-300">
+                    <div class="border-b border-black/5 bg-hero-wash px-5 pb-5 pt-6">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="min-w-0">
+                                <div class="font-heading text-2xl font-bold text-ink">Menu</div>
+                                <p class="mt-2 text-sm leading-6 text-ink/65">{{ site_settings.tagline if site_settings else "Premium cleaning" }}</p>
+                            </div>
+                            <button class="flex h-11 w-11 items-center justify-center rounded-full border border-mint/20 bg-mint-soft text-sm font-bold text-ink" type="button" data-mobile-drawer-close aria-label="Close menu">Close</button>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto px-5 py-6">
+                        <nav class="grid gap-3">
+                            {% for item in nav_items if item.is_button != 'true' %}
+                                <a class="rounded-[1.4rem] border border-black/5 px-5 py-4 text-base font-semibold {% if current_path == item.path or (item.path != '/' and current_path.startswith(item.path)) %}border-mint/30 bg-mint-soft text-mint{% else %}bg-white text-ink/80{% endif %}" href="{{ item.path }}" data-mobile-drawer-link>{{ item.label }}</a>
+                            {% endfor %}
+                        </nav>
+                        {% if mobile_cta %}
+                            <div class="mt-6 border-t border-black/5 pt-6">
+                                <a class="btn-primary w-full" href="{{ mobile_cta.path }}" data-mobile-drawer-link>{{ mobile_cta.label }}</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
         {% if messages %}
             <div class="container-shell mt-6 space-y-3">
@@ -111,7 +156,7 @@
             </div>
         {% endif %}
 
-        <main class="container-shell pb-20 pt-8">
+        <main class="container-shell pb-28 pt-8 sm:pb-20">
             {% block content %}{% endblock %}
         </main>
     </div>
@@ -143,10 +188,50 @@
     </footer>
 
     {% if not is_admin_area %}
-        {% set mobile_cta = (nav_items | selectattr('is_button', 'equalto', 'true') | list | first) %}
-        <a class="fixed bottom-4 left-4 right-4 z-50 inline-flex items-center justify-center rounded-full bg-brand px-6 py-4 text-sm font-extrabold text-white shadow-soft lg:hidden" href="{{ mobile_cta.path if mobile_cta else url_for('contact') }}">
-            {{ mobile_cta.label if mobile_cta else 'Contact' }}
-        </a>
+        {% if mobile_cta and current_path != mobile_cta.path %}
+            <a class="fixed bottom-4 left-4 right-4 z-50 inline-flex items-center justify-center rounded-full bg-brand px-6 py-4 text-sm font-extrabold text-white shadow-soft lg:hidden" href="{{ mobile_cta.path if mobile_cta else url_for('contact') }}">
+                {{ mobile_cta.label if mobile_cta else 'Contact' }}
+            </a>
+        {% endif %}
     {% endif %}
+    <script>
+        (() => {
+            const drawer = document.getElementById("mobile-site-drawer");
+            if (!drawer) return;
+            const panel = drawer.querySelector(".absolute.right-0");
+            const openButton = document.querySelector("[data-mobile-drawer-open]");
+            const closeButtons = drawer.querySelectorAll("[data-mobile-drawer-close], [data-mobile-drawer-link]");
+
+            const setOpen = (isOpen) => {
+                drawer.setAttribute("aria-hidden", String(!isOpen));
+                if (openButton) {
+                    openButton.setAttribute("aria-expanded", String(isOpen));
+                }
+                drawer.classList.toggle("pointer-events-none", !isOpen);
+                const backdrop = drawer.firstElementChild;
+                if (backdrop) {
+                    backdrop.classList.toggle("opacity-0", !isOpen);
+                    backdrop.classList.toggle("opacity-100", isOpen);
+                }
+                if (panel) {
+                    panel.classList.toggle("translate-x-full", !isOpen);
+                    panel.classList.toggle("translate-x-0", isOpen);
+                }
+                document.body.classList.toggle("overflow-hidden", isOpen);
+            };
+
+            if (openButton) {
+                openButton.addEventListener("click", () => setOpen(true));
+            }
+            closeButtons.forEach((button) => {
+                button.addEventListener("click", () => setOpen(false));
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    setOpen(false);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
