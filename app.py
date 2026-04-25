@@ -27,7 +27,20 @@ LOGOS_DIR = UPLOADS_DIR / "logos"
 POSTS_DIR = UPLOADS_DIR / "posts"
 FAVICON_DIR = BASE_DIR / "favicon"
 load_dotenv(BASE_DIR / ".env")
-DATABASE_URL = f"sqlite:///{BASE_DIR / 'sg_allclean.db'}"
+
+
+def normalize_database_url(value: str | None) -> str:
+    raw = str(value or "").strip()
+    if not raw:
+        return f"sqlite:///{BASE_DIR / 'sg_allclean.db'}"
+    if raw.startswith("postgres://"):
+        return "postgresql+psycopg://" + raw[len("postgres://"):]
+    if raw.startswith("postgresql://"):
+        return "postgresql+psycopg://" + raw[len("postgresql://"):]
+    return raw
+
+
+DATABASE_URL = normalize_database_url(os.environ.get("DATABASE_URL"))
 
 
 def normalize_admin_base_path(value: str) -> str:
@@ -44,7 +57,11 @@ class Base(DeclarativeBase):
     pass
 
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+IS_SQLITE = DATABASE_URL.startswith("sqlite")
+engine_kwargs = {"pool_pre_ping": True}
+if IS_SQLITE:
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+engine = create_engine(DATABASE_URL, **engine_kwargs)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
@@ -648,6 +665,8 @@ def seed_database() -> None:
 
 
 def ensure_database_schema() -> None:
+    if not IS_SQLITE:
+        return
     with engine.begin() as connection:
         admin_columns = {
             row[1]
