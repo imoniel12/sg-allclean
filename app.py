@@ -18,6 +18,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.sessions import SessionMiddleware
 from werkzeug.security import check_password_hash, generate_password_hash
 from markupsafe import Markup, escape
+from psycopg import ClientCursor
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -72,7 +73,10 @@ engine_kwargs = {"pool_pre_ping": True}
 if IS_SQLITE:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
 elif DATABASE_URL.startswith("postgresql+psycopg://"):
-    engine_kwargs["connect_args"] = {"prepare_threshold": None}
+    engine_kwargs["connect_args"] = {
+        "prepare_threshold": None,
+        "cursor_factory": ClientCursor,
+    }
 engine = create_engine(DATABASE_URL, **engine_kwargs)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
