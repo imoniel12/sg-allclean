@@ -1,14 +1,16 @@
 import os
 import re
 import secrets
+from base64 import b64decode
 from datetime import datetime, UTC
+from hmac import compare_digest
 from pathlib import Path
 from typing import Generator
 
 from fastapi import FastAPI, Request
 from fastapi.exception_handlers import http_exception_handler
 from fastapi.exceptions import HTTPException
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
@@ -62,6 +64,10 @@ def normalize_admin_base_path(value: str) -> str:
 ADMIN_BASE_PATH = normalize_admin_base_path(os.environ.get("ADMIN_BASE_PATH", "/portal-access"))
 FULL_ADMIN_ROLE = "full_admin"
 CONTENT_MODERATOR_ROLE = "content_moderator"
+BASIC_AUTH_ENABLED = os.environ.get("BASIC_AUTH_ENABLED", "false").lower() == "true"
+BASIC_AUTH_USERNAME = os.environ.get("BASIC_AUTH_USERNAME", "").strip()
+BASIC_AUTH_PASSWORD = os.environ.get("BASIC_AUTH_PASSWORD", "").strip()
+ROBOTS_DISALLOW_ALL = os.environ.get("ROBOTS_DISALLOW_ALL", "false").lower() == "true"
 
 
 class Base(DeclarativeBase):
@@ -324,6 +330,24 @@ def full_admin_count(session: Session) -> int:
             select(AdminUser).where(AdminUser.role == FULL_ADMIN_ROLE, AdminUser.is_active == "true")
         ).all()
     )
+
+
+def parse_basic_auth_header(value: str) -> tuple[str, str] | None:
+    if not value.startswith("Basic "):
+        return None
+    token = value[6:].strip()
+    try:
+        decoded = b64decode(token).decode("utf-8")
+    except Exception:
+        return None
+    if ":" not in decoded:
+        return None
+    username, password = decoded.split(":", 1)
+    return username, password
+
+
+def is_basic_auth_exempt_path(path: str) -> bool:
+    return path in {"/health", "/kaithhealthcheck", "/kaithheathcheck", "/robots.txt"}
 
 
 def seed_database() -> None:
@@ -734,6 +758,27 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 templates.env.filters["richtext"] = render_rich_text
 
 
+@app.middleware("http")
+async def staging_basic_auth(request: Request, call_next):
+    if BASIC_AUTH_ENABLED and not is_basic_auth_exempt_path(request.url.path):
+        credentials = parse_basic_auth_header(request.headers.get("authorization", ""))
+        is_valid = bool(
+            credentials
+            and compare_digest(credentials[0], BASIC_AUTH_USERNAME)
+            and compare_digest(credentials[1], BASIC_AUTH_PASSWORD)
+        )
+        if not is_valid:
+            return Response(
+                content="Authentication required",
+                status_code=401,
+                headers={"WWW-Authenticate": 'Basic realm="SG AllClean Staging"'},
+            )
+    response = await call_next(request)
+    if BASIC_AUTH_ENABLED or ROBOTS_DISALLOW_ALL:
+        response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    return response
+
+
 @app.on_event("startup")
 def startup_event():
     LOGOS_DIR.mkdir(parents=True, exist_ok=True)
@@ -774,6 +819,15 @@ def index(request: Request):
 @app.get("/favicon.ico", include_in_schema=False)
 def favicon_ico():
     return FileResponse(FAVICON_DIR / "favicon.ico")
+
+
+@app.get("/robots.txt", include_in_schema=False)
+def robots_txt():
+    if ROBOTS_DISALLOW_ALL:
+        body = "User-agent: *\nDisallow: /\n"
+    else:
+        body = f"User-agent: *\nDisallow: {ADMIN_BASE_PATH}/\n"
+    return PlainTextResponse(body)
 
 
 @app.get("/health", include_in_schema=False)
