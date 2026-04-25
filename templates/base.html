@@ -59,7 +59,7 @@
         }
     </style>
 </head>
-<body class="bg-white">
+<body class="bg-white pb-28 sm:pb-0">
     {% set mobile_cta = (nav_items | selectattr('is_button', 'equalto', 'true') | list | first) if not is_admin_area else none %}
     <div class="bg-hero-wash">
         <header class="container-shell sticky top-3 z-40 pt-4">
@@ -113,8 +113,8 @@
                             <a class="btn-primary" href="{{ item.path }}">{{ item.label }}</a>
                         {% endfor %}
                     </nav>
-                    <button class="flex h-12 w-12 items-center justify-center rounded-full border border-mint/20 bg-mint-soft text-ink lg:hidden" type="button" data-mobile-drawer-open aria-label="Open menu" aria-controls="mobile-site-drawer" aria-expanded="false">
-                        <span class="text-[0.7rem] font-bold uppercase tracking-[0.18em]">Menu</span>
+                    <button class="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-white text-ink shadow-[0_8px_24px_rgba(51,51,51,0.06)] lg:hidden" type="button" data-mobile-drawer-open aria-label="Open menu" aria-controls="mobile-site-drawer" aria-expanded="false">
+                        <span class="block h-[2px] w-5 rounded-full bg-ink shadow-[0_-6px_0_0_#333333,0_6px_0_0_#333333]"></span>
                     </button>
                 {% endif %}
             </div>
@@ -122,21 +122,21 @@
 
         {% if not is_admin_area %}
             <div id="mobile-site-drawer" class="pointer-events-none fixed inset-0 z-[70] lg:hidden" aria-hidden="true">
-                <div class="absolute inset-0 bg-black/35 opacity-0 transition-opacity duration-300" data-mobile-drawer-close></div>
-                <div class="absolute right-0 top-0 flex h-full w-[min(24rem,100%)] translate-x-full flex-col bg-white shadow-soft transition-transform duration-300">
-                    <div class="border-b border-black/5 bg-hero-wash px-5 pb-5 pt-6">
+                <div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300" data-mobile-drawer-close></div>
+                <div class="absolute right-0 top-0 flex h-full w-[min(24rem,100%)] translate-x-full flex-col bg-[#fffdfb] shadow-[0_28px_90px_rgba(51,51,51,0.16)] transition-transform duration-300">
+                    <div class="border-b border-black/5 bg-[radial-gradient(circle_at_top_right,rgba(240,94,49,0.12),transparent_32%),radial-gradient(circle_at_left_center,rgba(62,180,137,0.1),transparent_28%),linear-gradient(180deg,#fffaf7_0%,#fffdfb_100%)] px-5 pb-5 pt-6">
                         <div class="flex items-start justify-between gap-4">
                             <div class="min-w-0">
                                 <div class="font-heading text-2xl font-bold text-ink">Menu</div>
                                 <p class="mt-2 text-sm leading-6 text-ink/65">{{ site_settings.tagline if site_settings else "Premium cleaning" }}</p>
                             </div>
-                            <button class="flex h-11 w-11 items-center justify-center rounded-full border border-mint/20 bg-mint-soft text-sm font-bold text-ink" type="button" data-mobile-drawer-close aria-label="Close menu">Close</button>
+                            <button class="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-xl font-semibold text-ink shadow-[0_8px_24px_rgba(51,51,51,0.06)]" type="button" data-mobile-drawer-close aria-label="Close menu">&times;</button>
                         </div>
                     </div>
                     <div class="flex-1 overflow-y-auto px-5 py-6">
                         <nav class="grid gap-3">
                             {% for item in nav_items if item.is_button != 'true' %}
-                                <a class="rounded-[1.4rem] border border-black/5 px-5 py-4 text-base font-semibold {% if current_path == item.path or (item.path != '/' and current_path.startswith(item.path)) %}border-mint/30 bg-mint-soft text-mint{% else %}bg-white text-ink/80{% endif %}" href="{{ item.path }}" data-mobile-drawer-link>{{ item.label }}</a>
+                                <a class="rounded-[1.4rem] border px-5 py-4 text-base font-semibold shadow-[0_8px_24px_rgba(51,51,51,0.03)] {% if current_path == item.path or (item.path != '/' and current_path.startswith(item.path)) %}border-brand/15 bg-[#fff3ee] text-brand{% else %}border-black/5 bg-white text-ink/80{% endif %}" href="{{ item.path }}" data-mobile-drawer-link>{{ item.label }}</a>
                             {% endfor %}
                         </nav>
                         {% if mobile_cta %}
