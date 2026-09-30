@@ -1,0 +1,12 @@
+{% extends "admin/index.html" %}
+
+{% block content_title %}{% endblock %}
+{% block content %}
+<section class="sg-welcome" aria-labelledby="sg-dashboard-title">
+    <p class="sg-eyebrow">Your website, in one place</p>
+    <h1 id="sg-dashboard-title">A fresh start for your workday.</h1>
+    <p>Keep services and prices up to date, review quote requests, and manage the details clients see.</p>
+    <a class="sg-public-link" href="/">View public website &rarr;</a>
+</section>
+{{ block.super }}
+{% endblock %}

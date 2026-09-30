@@ -1,0 +1,21 @@
+{% if errors %}<div class="form-errors" role="alert" tabindex="-1" id="form-errors"><h3>Please check your request</h3><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul><p>If you selected photos, please select them again before resubmitting.</p></div>{% endif %}
+<form method="post" action="{{ url_for('contact_submit') }}" enctype="multipart/form-data" class="quote-form" data-quote-form>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><input type="hidden" name="quote_token" value="{{ quote_token }}">
+    <div class="honeypot" aria-hidden="true"><label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+    <p class="form-wide quiet">Fields marked * are required. Provide at least one contact method: phone or email.</p>
+    <label>Your name *<input name="name" autocomplete="name" maxlength="200" required value="{{ values.get('name', '') }}"></label>
+    <label>Service *<select name="service" required><option value="">Choose a service</option>{% for service in quote_services %}<option value="{{ service.slug }}" {% if values.get('service') == service.slug %}selected{% endif %}>{{ service.title }}</option>{% endfor %}</select></label>
+    <label>Phone <span class="field-hint">Phone or email required</span><input name="phone" type="tel" autocomplete="tel" maxlength="40" value="{{ values.get('phone', '') }}"></label>
+    <label>Email <span class="field-hint">Phone or email required</span><input name="email" type="email" autocomplete="email" maxlength="200" value="{{ values.get('email', '') }}"></label>
+    <label>City / barangay *<input name="city" autocomplete="address-level2" placeholder="e.g. BGC, Fort Bonifacio, Taguig" maxlength="200" required value="{{ values.get('city', '') }}"></label>
+    <label>Property type *<input name="property_type" list="property-types" placeholder="Condo, Airbnb, small office…" maxlength="200" required value="{{ values.get('property_type', '') }}"><datalist id="property-types"><option value="Condo"><option value="Airbnb"><option value="Small office"><option value="House"></datalist></label>
+    <label>Approximate size (sqm) *<input name="sqm" type="number" min="0.1" max="100000" step="0.1" required value="{{ values.get('sqm', '') }}"></label>
+    <label>Preferred date *<input name="preferred_date" type="date" min="{{ today }}" required value="{{ values.get('preferred_date', '') }}"><span class="field-hint">Subject to availability; we will confirm with you.</span></label>
+    <label class="form-wide">Brief task description *<textarea name="description" rows="4" maxlength="3000" required placeholder="Tell us what needs cleaning and the condition of the space.">{{ values.get('description', '') }}</textarea></label>
+    <label>Number of rooms (optional)<input name="rooms" type="number" min="0" max="1000" value="{{ values.get('rooms', '') }}"></label>
+    <label>Photos (optional)<input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="photo-help"><span class="field-hint" id="photo-help">Up to 3 JPG, PNG or WebP photos, 5 MB and 20 megapixels each. Only share images you have permission to provide. Photos are private and expire after 30 days.</span></label>
+    <label class="form-wide">Special requests (optional)<textarea name="special_requests" rows="3" maxlength="3000" placeholder="Access instructions, recurring visits or extra tasks.">{{ values.get('special_requests', '') }}</textarea></label>
+    <label class="consent form-wide"><input type="checkbox" name="privacy_consent" required><span>I agree to the <a class="text-link" href="/privacy">privacy notice</a> and to SG AllClean using my inquiry details and any photos to prepare a quote and contact me. Photos will not be published without separate permission.</span></label>
+    <div class="form-wide"><button class="btn-primary" type="submit">Request a Quote</button><p class="quiet">We will review your request and contact you to confirm scope, price and availability. Submitting this form does not confirm a booking or require online payment.</p></div>
+</form>
+<script src="/static/quote-form.js" defer></script>

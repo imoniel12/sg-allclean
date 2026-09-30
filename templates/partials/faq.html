@@ -1,0 +1,4 @@
+<div class="faq-list">{% for block in answers %}{% set lines = block.split('\n', 1) %}
+    <details><summary>{{ lines[0] }}</summary><p>{{ lines[1] if lines|length > 1 else '' }}</p></details>
+{% endfor %}</div>
+<p class="quiet">See <a class="text-link" href="/services">services and prices</a> or <a class="text-link" href="/contact">request a quote</a> for your property.</p>

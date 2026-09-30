@@ -1,27 +1,23 @@
 {% extends "base.html" %}
-{% block title %}Services | {{ site_settings.company_name }}{% endblock %}
+{% block title %}Services & Prices | SG AllClean{% endblock %}
 {% block content %}
-<section class="py-10">
-    <p class="section-label">Services</p>
-    <h1 class="max-w-4xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">Cleaning programs tailored to the way your property operates.</h1>
-    <p class="mt-5 max-w-3xl text-lg leading-8 text-ink/70">
-        Residential, office, and turnover cleaning designed for a premium finish, clear coordination, and repeatable quality.
-    </p>
+<section class="site-section page-heading">
+<p class="section-label">Services & Prices</p>
+<h1>The right clean for your space.</h1>
+<p class="lead">One-time and recurring cleaning in Makati and BGC, with clear starting prices and an agreed checklist.</p>
 </section>
-
-<section class="grid gap-5 lg:grid-cols-3">
-    {% for service in services %}
-        <article class="panel flex h-full flex-col rounded-[2.25rem] p-7">
-            <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#fff3ee] font-heading text-xl font-bold text-brand">
-                {{ service.title[0] }}
-            </div>
-            <div class="mt-5 inline-flex w-fit rounded-full bg-brand/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-brand">
-                {{ service.highlight }}
-            </div>
-            <h2 class="mt-5 text-2xl font-bold text-ink">{{ service.title }}</h2>
-            <p class="mt-4 flex-1 text-sm leading-7 text-ink/70">{{ service.summary }}</p>
-            <a class="card-link mt-6" href="{{ url_for('service_detail', slug=service.slug) }}">Learn more</a>
-        </article>
-    {% endfor %}
+{% include "partials/service_cards.html" %}{% include "partials/price_note.html" %}
+<section class="site-section" id="add-ons">
+<p class="section-label">Add-ons</p>
+<h2>{{ addons.title }}</h2>
+<p class="section-intro">{{ addons.subtitle }}</p>
+<div class="addon-grid">{% for block in addons.body.split('\n\n') %}{% set lines = block.split('\n', 1) %}<article>
+<h3>{{ lines[0] }}</h3>
+<p>{{ lines[1] if lines|length > 1 else '' }}</p>
+</article>{% endfor %}</div>
+<div class="action-row">
+<a class="btn-primary" href="/contact">Request a Quote</a>
+<a class="text-link" href="/faq">Questions before booking? &rarr;</a>
+</div>
 </section>
 {% endblock %}

@@ -1,10 +1,8 @@
+"""Local development entry point: python main.py."""
 import os
-
-import uvicorn
-
+import sys
+from django.core.management import execute_from_command_line
 
 if __name__ == "__main__":
-    host = os.environ.get("HOST", "0.0.0.0")
-    port = int(os.environ.get("PORT", "8000"))
-    reload_enabled = os.environ.get("UVICORN_RELOAD", "false").lower() == "true"
-    uvicorn.run("app:app", host=host, port=port, reload=reload_enabled)
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    execute_from_command_line([sys.argv[0], "runserver", os.environ.get("HOST", "127.0.0.1") + ":" + os.environ.get("PORT", "8000")])

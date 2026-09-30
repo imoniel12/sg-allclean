@@ -1,0 +1,21 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <title>{{ error_code }} | SG AllClean</title>
+    <link rel="icon" href="/favicon/favicon.ico">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+<main class="container-shell">
+    <section class="site-section page-heading">
+        <p class="section-label">Error {{ error_code }}</p>
+        <h1>{{ error_title }}</h1>
+        <p class="lead">Please try again. If the problem continues, call or message SG AllClean.</p>
+        <div class="action-row"><a class="btn-primary" href="/">Back to Home</a><a class="btn-secondary" href="/contact">Contact SG AllClean</a></div>
+    </section>
+</main>
+</body>
+</html>

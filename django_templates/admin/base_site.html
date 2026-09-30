@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | SG AllClean Admin{% endblock %}
+
+{% block dark-mode-vars %}{% endblock %}
+
+{% block responsive %}
+    {{ block.super }}
+    <link rel="icon" href="/favicon/favicon.ico">
+    <link rel="stylesheet" href="{% static 'admin-theme.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a class="sg-brand" href="{% url 'admin:index' %}">
+        <img src="/favicon/apple-touch-icon.png" alt="" width="44" height="44">
+        <span><strong>SG AllClean</strong><small>Website administration</small></span>
+    </a>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="sg-footer">SG AllClean <span>Clean spaces. Clear minds. Better living.</span><a href="/">View public website &rarr;</a></div>
+{% endblock %}

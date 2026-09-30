@@ -5,3 +5,10 @@ __pycache__/
 .venv/
 README.md
 .DS_Store
+.backups/
+artifacts/
+
+*.sqlite3
+*.sqlite3-journal
+media/
+staticfiles/

@@ -1,26 +1,13 @@
-{% extends "base.html" %}
-{% block title %}Data Privacy Statement | {{ site_settings.company_name }}{% endblock %}
-{% block content %}
-<section class="py-10">
-    <p class="section-label">Privacy</p>
-    <h1 class="max-w-5xl text-5xl font-extrabold leading-[0.95] text-ink sm:text-6xl">{{ page.title }}</h1>
-    <p class="mt-5 max-w-4xl text-lg leading-8 text-ink/70">{{ page.subtitle }}</p>
+{% extends "base.html" %}{% block title %}Privacy Notice | SG AllClean{% endblock %}{% block content %}
+<section class="site-section page-heading">
+<p class="section-label">Privacy</p>
+<h1>{{ page.title }}</h1>
+<p class="lead">{{ page.subtitle }}</p>
 </section>
-
-<section class="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
-    <aside class="panel rounded-[2.5rem] bg-[#fff8f4] px-7 py-8">
-        <p class="section-label">Quick Summary</p>
-        <div class="space-y-4 text-sm leading-7 text-ink/70">
-            <p>We collect only the information reasonably needed to respond to inquiries, arrange services, manage bookings, and support our client relationship.</p>
-            <p>We do not use your data for unrelated purposes without a lawful basis or your consent where consent is required.</p>
-            <p>If you have questions about your information, contact us at {{ site_settings.contact_email }} or {{ site_settings.contact_phone }}.</p>
-        </div>
-    </aside>
-
-    <article class="panel rounded-[2.5rem] px-7 py-8 sm:px-10 sm:py-10">
-        <div class="prose prose-lg max-w-none prose-headings:font-heading prose-p:text-ink/75 prose-p:leading-8">
-            {{ page.body|richtext }}
-        </div>
-    </article>
-</section>
-{% endblock %}
+<article class="service-card prose">{{ page.body|richtext }}<h2>Quote inquiries and optional photos</h2>
+<p>We store your submitted details in a restricted inquiry inbox to prepare a quote and contact you. If email notifications are enabled, inquiry details are also sent to our designated business mailbox.</p>
+<p>Photos are optional, visible only to authorized inquiry administrators, and are not published. Uploaded photos are resized and metadata is removed. Photo access expires after 30 days. Expired photos are removed by scheduled cleanup or when an inquiry is submitted or the inquiry inbox is opened.</p>
+<p>We retain inquiry details while needed for service coordination and related records. Contact us to request deletion. Database records, mailbox copies and backups are managed separately; deletion from the inbox does not automatically delete mailbox or backup copies.</p>
+<h2>Contact us</h2>
+<p>For questions, corrections or deletion requests, call <a class="text-link" href="{{ phone_href }}">{{ site_settings.contact_phone }}</a>{% if public_email %} or email <a class="text-link" href="mailto:{{ public_email }}">{{ public_email }}</a>{% endif %}.</p>
+</article>{% endblock %}

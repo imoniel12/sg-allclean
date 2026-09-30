@@ -1,0 +1,10 @@
+<div class="service-grid">
+{% for service in services %}
+    <article class="service-card">
+        <p class="section-label">{{ service.highlight }}</p>
+        <h3>{{ service.title }}</h3><p>{{ service.summary }}</p>
+        <div class="package-details">{{ service.details|richtext }}</div>
+        <div class="action-row"><a class="btn-primary" href="/contact?service={{ service.slug|urlencode }}">Request a Quote</a><a class="text-link" href="{{ url_for('service_detail', slug=service.slug) }}">Service details →</a></div>
+    </article>
+{% endfor %}
+</div>

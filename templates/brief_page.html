@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ 'FAQ' if page.slug == 'faq' else 'How It Works' }} | SG AllClean{% endblock %}
+{% block content %}
+<section class="site-section page-heading">
+<p class="section-label">{{ 'FAQ' if page.slug == 'faq' else 'How It Works' }}</p>
+<h1>{{ page.title }}</h1>
+<p class="lead">{{ page.subtitle }}</p>
+</section>
+{% if page.slug == 'faq' %}{% set answers = page.body.split('\n\n') %}{% include "partials/faq.html" %}
+{% else %}{% set steps = page.body.split('\n\n') %}{% include "partials/steps.html" %}{% endif %}
+<div class="action-row">
+<a class="btn-primary" href="/contact">Request a Quote</a>
+<a class="btn-secondary" href="/services">View Services & Prices</a>
+</div>
+{% endblock %}
