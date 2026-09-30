@@ -14,6 +14,9 @@
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header class="site-header">
+<div class="service-strip">
+<div class="container-shell"><span>Cleaning services for Makati &amp; BGC</span><a href="{{ phone_href }}">Call {{ site_settings.contact_phone if site_settings else '' }}</a></div>
+</div>
 <div class="container-shell header-inner">
 <a class="brand" href="/" aria-label="SG AllClean home">{% if site_settings and site_settings.logo_url %}<img src="{{ site_settings.logo_url }}" alt="SG AllClean" width="80" height="48">{% else %}<span class="brand-mark" aria-hidden="true">SG</span>{% endif %}<span>
 <strong>SG AllClean</strong>
@@ -21,7 +24,7 @@
 </span>
 </a>
 <nav class="desktop-nav" aria-label="Main navigation">{% for item in nav_items %}<a class="{{ 'btn-primary' if item.is_button else 'nav-link' }}" href="{{ item.path|safe_internal_url }}" {% if current_path == item.path %}aria-current="page"{% endif %}>{{ item.label }}</a>{% endfor %}</nav>
-<button class="menu-button" type="button" aria-haspopup="dialog" aria-controls="mobile-menu" aria-label="Open menu">Menu &#9776;</button>
+<button class="menu-button" type="button" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">Menu <span aria-hidden="true">&#9776;</span></button>
 </div>
 </header>
 <dialog id="mobile-menu" aria-labelledby="menu-title">
@@ -29,18 +32,18 @@
 <h2 id="menu-title">SG AllClean</h2>
 <button type="button" data-close-menu aria-label="Close menu">Close &times;</button>
 </div>
-<nav aria-label="Mobile navigation">{% for item in nav_items %}<a class="{{ 'btn-primary' if item.is_button else 'nav-link' }}" href="{{ item.path|safe_internal_url }}">{{ item.label }}</a>{% endfor %}<a href="{{ phone_href }}">Call {{ site_settings.contact_phone if site_settings else '' }}</a>
+<nav aria-label="Mobile navigation">{% for item in nav_items %}<a class="{{ 'btn-primary' if item.is_button else 'nav-link' }}" href="{{ item.path|safe_internal_url }}" {% if current_path == item.path %}aria-current="page"{% endif %}>{{ item.label }}</a>{% endfor %}<a href="{{ phone_href }}">Call {{ site_settings.contact_phone if site_settings else '' }}</a>
 <a href="{{ facebook_message_url }}" target="_blank" rel="noopener noreferrer">Facebook Message &rarr;</a>
 </nav>
 </dialog>
 <main class="container-shell" id="main-content">{% if messages %}<div id="confirmation" class="confirmation" role="status" tabindex="-1">{% for item in messages %}<p>{{ item.message }}</p>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
 <footer class="site-footer">
 <div class="container-shell footer-grid">
-<div>{% if site_settings and site_settings.logo_url %}<img class="footer-logo" src="{{ site_settings.logo_url }}" alt="SG AllClean logo" width="100" height="60">{% endif %}<p class="section-label">{{ footer_content.get('footer.badge', 'Cleaning in Makati & BGC') }}</p>
+<div class="footer-intro">{% if site_settings and site_settings.logo_url %}<img class="footer-logo" src="{{ site_settings.logo_url }}" alt="SG AllClean logo" width="100" height="100">{% endif %}<p class="section-label">{{ footer_content.get('footer.badge', 'Cleaning in Makati & BGC') }}</p>
 <h2>Clean spaces.<br>Clear minds.<br>Better living.</h2>
 <p>{{ footer_content.get('footer.body', '') }}</p>
 </div>
-<div>
+<div class="footer-contact">
 <h3>Service areas</h3>
 <p>{{ site_settings.coverage if site_settings else '' }}</p>
 <h3>Contact</h3>
@@ -51,6 +54,7 @@
 </div>
 </div>
 </div>
+<div class="container-shell footer-base"><span>&copy; SG AllClean</span><span>Scope, price and schedule agreed before booking.</span></div>
 </footer>
 <nav class="mobile-quick-links" aria-label="Quick actions">
 <a href="/services">Services & Prices</a>

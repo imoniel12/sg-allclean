@@ -4,10 +4,15 @@
     if (menu && opener) {
         opener.addEventListener("click", () => {
             menu.showModal();
+            opener.setAttribute("aria-expanded", "true");
             document.body.classList.add("menu-open");
         });
         menu.querySelector("[data-close-menu]")?.addEventListener("click", () => menu.close());
-        menu.addEventListener("close", () => document.body.classList.remove("menu-open"));
+        menu.addEventListener("close", () => {
+            document.body.classList.remove("menu-open");
+            opener.setAttribute("aria-expanded", "false");
+            opener.focus();
+        });
         menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => menu.close()));
         menu.addEventListener("click", (event) => {
             if (event.target !== menu) return;
